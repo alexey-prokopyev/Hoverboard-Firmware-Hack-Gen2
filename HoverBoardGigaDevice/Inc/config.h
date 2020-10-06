@@ -43,16 +43,16 @@
 #define PWM_FREQ         		16000     // PWM frequency in Hz
 #define DEAD_TIME        		60        // PWM deadtime (60 = 1µs, measured by oscilloscope)
 
-#define DC_CUR_LIMIT     		15        // Motor DC current limit in amps
+#define DC_CUR_LIMIT     		5        // Motor DC current limit in amps
 
 // ################################################################################
 
 #define DELAY_IN_MAIN_LOOP 	5         // Delay in ms
 
-#define TIMEOUT_MS          2000      // Time in milliseconds without steering commands before pwm emergency off
+#define TIMEOUT_MS          200      // Time in milliseconds without steering commands before pwm emergency off
 
 #ifdef MASTER
-#define INACTIVITY_TIMEOUT 	8        	// Minutes of not driving until poweroff (not very precise)
+#define INACTIVITY_TIMEOUT 	1        	// Minutes of not driving until poweroff (not very precise)
 
 // ################################################################################
 
@@ -68,7 +68,7 @@
 #endif
 
 // ###### ARMCHAIR ######
-#define FILTER_SHIFT 12 						// Low-pass filter for pwm, rank k=12
+#define FILTER_SHIFT 0 						// Low-pass filter for pwm, rank k=12
 
 #ifdef MASTER
 #define SPEED_COEFFICIENT   -1

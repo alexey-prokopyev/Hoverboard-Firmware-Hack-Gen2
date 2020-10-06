@@ -164,8 +164,8 @@ void CheckUSARTMasterSlaveInput(uint8_t USARTBuffer[])
 	
 	// Set functions according to the variables
 	gpio_bit_write(MOSFET_OUT_PORT, MOSFET_OUT_PIN, mosfetOut);
-	gpio_bit_write(UPPER_LED_PORT, UPPER_LED_PIN, upperLED);
-	gpio_bit_write(LOWER_LED_PORT, LOWER_LED_PIN, lowerLED);
+	//gpio_bit_write(UPPER_LED_PORT, UPPER_LED_PIN, upperLED);
+	//gpio_bit_write(LOWER_LED_PORT, LOWER_LED_PIN, lowerLED);
 #endif
 #ifdef SLAVE
 	// Calculate result pwm value -1000 to 1000

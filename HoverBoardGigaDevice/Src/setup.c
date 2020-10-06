@@ -78,14 +78,14 @@ ErrStatus Watchdog_init(void)
 	// Prescaler is 16
 	// Reload value is 4096 (0x0FFF)
 	// Watchdog fires after 1638.4 ms
-	if (fwdgt_config(0x0FFF, FWDGT_PSC_DIV16) != SUCCESS ||
+	if (fwdgt_config(0xFFFF, FWDGT_PSC_DIV256) != SUCCESS ||
 		fwdgt_window_value_config(0x0FFF) != SUCCESS)
 	{
 		return ERROR;
 	}
 
 	// Enable free watchdog timer
-	fwdgt_enable();
+	//fwdgt_enable();
 	
 	return SUCCESS;
 }
@@ -131,6 +131,7 @@ void GPIO_init(void)
 	rcu_periph_clock_enable(RCU_GPIOC);
 	rcu_periph_clock_enable(RCU_GPIOF);
 	
+	/*
 	// Init green LED
 	gpio_mode_set(LED_GREEN_PORT , GPIO_MODE_OUTPUT, GPIO_PUPD_NONE,LED_GREEN);	
 	gpio_output_options_set(LED_GREEN_PORT, GPIO_OTYPE_PP, GPIO_OSPEED_10MHZ, LED_GREEN);
@@ -148,6 +149,7 @@ void GPIO_init(void)
 	gpio_output_options_set(UPPER_LED_PORT, GPIO_OTYPE_PP, GPIO_OSPEED_10MHZ, UPPER_LED_PIN);
 	gpio_mode_set(LOWER_LED_PORT , GPIO_MODE_OUTPUT, GPIO_PUPD_NONE,LOWER_LED_PIN);	
 	gpio_output_options_set(LOWER_LED_PORT, GPIO_OTYPE_PP, GPIO_OSPEED_10MHZ, LOWER_LED_PIN);
+	*/
 	
 	// Init mosfet output
 	gpio_mode_set(MOSFET_OUT_PORT, GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, MOSFET_OUT_PIN);	
@@ -158,6 +160,7 @@ void GPIO_init(void)
 	gpio_mode_set(HALL_B_PORT , GPIO_MODE_INPUT, GPIO_PUPD_NONE, HALL_B_PIN);
 	gpio_mode_set(HALL_C_PORT , GPIO_MODE_INPUT, GPIO_PUPD_NONE, HALL_C_PIN);	
 	
+
 	// Init USART_MASTERSLAVE
 	gpio_mode_set(USART_MASTERSLAVE_TX_PORT , GPIO_MODE_AF, GPIO_PUPD_PULLUP, USART_MASTERSLAVE_TX_PIN);	
 	gpio_mode_set(USART_MASTERSLAVE_RX_PORT , GPIO_MODE_AF, GPIO_PUPD_PULLUP, USART_MASTERSLAVE_RX_PIN);
@@ -165,6 +168,7 @@ void GPIO_init(void)
 	gpio_output_options_set(USART_MASTERSLAVE_RX_PORT, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, USART_MASTERSLAVE_RX_PIN);	
 	gpio_af_set(USART_MASTERSLAVE_TX_PORT, GPIO_AF_1, USART_MASTERSLAVE_TX_PIN);
 	gpio_af_set(USART_MASTERSLAVE_RX_PORT, GPIO_AF_1, USART_MASTERSLAVE_RX_PIN);
+
 	
 	// Init ADC pins
 	gpio_mode_set(VBATT_PORT, GPIO_MODE_ANALOG, GPIO_PUPD_NONE, VBATT_PIN);
@@ -173,8 +177,8 @@ void GPIO_init(void)
 	gpio_mode_set(GPIOB, GPIO_MODE_ANALOG, GPIO_PUPD_NONE, GPIO_PIN_0);
 	
 	// Init debug pin
-	gpio_mode_set(DEBUG_PORT , GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, DEBUG_PIN);	
-	gpio_output_options_set(DEBUG_PORT, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, DEBUG_PIN);
+	//gpio_mode_set(DEBUG_PORT , GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, DEBUG_PIN);	
+	//gpio_output_options_set(DEBUG_PORT, GPIO_OTYPE_PP, GPIO_OSPEED_50MHZ, DEBUG_PIN);
 	
 	// Init emergency shutdown pin
 	gpio_mode_set(TIMER_BLDC_EMERGENCY_SHUTDOWN_PORT , GPIO_MODE_AF, GPIO_PUPD_NONE, TIMER_BLDC_EMERGENCY_SHUTDOWN_PIN);
@@ -203,8 +207,8 @@ void GPIO_init(void)
 	gpio_af_set(TIMER_BLDC_YL_PORT, GPIO_AF_2, TIMER_BLDC_YL_PIN);
 	
 	// Init self hold
-	gpio_mode_set(SELF_HOLD_PORT , GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, SELF_HOLD_PIN);	
-	gpio_output_options_set(SELF_HOLD_PORT, GPIO_OTYPE_PP, GPIO_OSPEED_10MHZ, SELF_HOLD_PIN);
+	//gpio_mode_set(SELF_HOLD_PORT , GPIO_MODE_OUTPUT, GPIO_PUPD_NONE, SELF_HOLD_PIN);	
+	//gpio_output_options_set(SELF_HOLD_PORT, GPIO_OTYPE_PP, GPIO_OSPEED_10MHZ, SELF_HOLD_PIN);
 	
 	// Init USART0
 	gpio_mode_set(USART_STEER_COM_TX_PORT , GPIO_MODE_AF, GPIO_PUPD_PULLUP, USART_STEER_COM_TX_PIN);	
@@ -391,7 +395,7 @@ void USART_MasterSlave_init(void)
 {
 	// Enable ADC and DMA clock
 	rcu_periph_clock_enable(RCU_USART1);
-	rcu_periph_clock_enable(RCU_DMA);
+	//rcu_periph_clock_enable(RCU_DMA);
 	
 	// Init USART for 115200 baud, 8N1
 	usart_baudrate_set(USART_MASTERSLAVE, 115200);
@@ -450,7 +454,7 @@ void USART_Steer_COM_init(void)
 	rcu_periph_clock_enable(RCU_DMA);
 	
 	// Init USART for 19200 baud, 8N1
-	usart_baudrate_set(USART_STEER_COM, 19200);
+	usart_baudrate_set(USART_STEER_COM, 115200);
 	usart_parity_config(USART_STEER_COM, USART_PM_NONE);
 	usart_word_length_set(USART_STEER_COM, USART_WL_8BIT);
 	usart_stop_bit_set(USART_STEER_COM, USART_STB_1BIT);

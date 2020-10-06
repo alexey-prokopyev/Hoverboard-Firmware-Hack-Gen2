@@ -74,6 +74,7 @@ void ResetTimeout(void)
 //----------------------------------------------------------------------------
 void TIMER13_IRQHandler(void)
 {	
+	
 	if (timeoutCounter_ms > TIMEOUT_MS)
 	{
 		// First timeout reset all process values
@@ -82,7 +83,7 @@ void TIMER13_IRQHandler(void)
 #ifdef MASTER
 			steer = 0;
 			speed = 0;
-			beepsBackwards = RESET;
+			//beepsBackwards = RESET;
 #endif
 #ifdef SLAVE
 			SetPWM(0);

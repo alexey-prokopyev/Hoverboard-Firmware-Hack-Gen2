@@ -40,6 +40,7 @@
 #include "../Inc/commsMasterSlave.h"
 #include "../Inc/commsSteering.h"
 #include "../Inc/commsBluetooth.h"
+#include "../Inc/Logger.h"
 #include "stdio.h"
 #include "stdlib.h"
 #include "string.h"
@@ -68,6 +69,9 @@ uint32_t steerCounter = 0;								// Steer counter for setting update rate
 void ShowBatteryState(uint32_t pin);
 void BeepsBackwards(FlagStatus beepsBackwards);
 void ShutOff(void);
+
+
+float alpha;
 #endif
 
 const float lookUpTableAngle[181] =  
@@ -275,24 +279,28 @@ int main (void)
 	float expo = 0;
 	float steerAngle = 0;
 	float xScale = 0;
+	
+	FlagStatus hall_a, hall_b, hall_c;
 #endif
 	
 	//SystemClock_Config();
   SystemCoreClockUpdate();
-  SysTick_Config(SystemCoreClock / 100);
+  SysTick_Config(SystemCoreClock / 1000);
 	
-	// Init watchdog
+
+	// Init watchdog (disabled)
 	if (Watchdog_init() == ERROR)
 	{
 		// If an error accours with watchdog initialization do not start device
 		while(1);
 	}
+
 	
 	// Init Interrupts
 	Interrupt_init();
 	
 	// Init timeout timer
-	TimeoutTimer_init();
+	//TimeoutTimer_init();
 	
 	// Init GPIOs
 	GPIO_init();
@@ -301,7 +309,9 @@ int main (void)
 	gpio_bit_write(SELF_HOLD_PORT, SELF_HOLD_PIN, SET);
 
 	// Init usart master slave
-	USART_MasterSlave_init();
+	//USART_MasterSlave_init();
+	
+	Log("Starting Jover\n");
 	
 	// Init ADC
 	ADC_init();
@@ -311,7 +321,7 @@ int main (void)
 	
 	// Device has 1,6 seconds to do all the initialization
 	// afterwards watchdog will be fired
-	fwdgt_counter_reload();
+	//fwdgt_counter_reload();
 
 	// Init usart steer/bluetooth
 	USART_Steer_COM_init();
@@ -325,14 +335,48 @@ int main (void)
   }
   buzzerFreq = 0;
 
+	/*
 	// Wait until button is pressed
 	while (gpio_input_bit_get(BUTTON_PORT, BUTTON_PIN))
 	{
 		// Reload watchdog while button is pressed
 		fwdgt_counter_reload();
 	}
+	*/
 #endif
 
+	
+	// -1000 ... 1000
+	speed = 0;
+	
+	//Delay(5000);
+	
+	
+	alpha = 0.0;
+	SetPWM(100);
+	SetEnable(SET);
+	
+	while(1)
+	{
+		//alpha += PI / 2.0 / 4;
+		//speed = sin(alpha) * 200.0;
+		//steerAngle+= 1.0;
+		
+		
+		//pwmMaster = CLAMP(speed, -1000, 1000);
+		//SetPWM(pwmMaster);
+		
+		fwdgt_counter_reload();
+		Delay(100);
+		
+		// Read hall sensors
+		hall_a = gpio_input_bit_get(HALL_A_PORT, HALL_A_PIN);
+		hall_b = gpio_input_bit_get(HALL_B_PORT, HALL_B_PIN);
+		hall_c = gpio_input_bit_get(HALL_C_PORT, HALL_C_PIN);
+		Log("HALL: (%d, %d, %d)\r\n", hall_a, hall_b, hall_c);
+	}
+
+/*
   while(1)
 	{
 #ifdef MASTER
@@ -342,7 +386,7 @@ int main (void)
 			// Request steering data
 			SendSteerDevice();
 		}
-		
+
 		// Calculate expo rate for less steering with higher speeds
 		expo = MAP((float)ABS(speed), 0, 1000, 1, 0.5);
 		
@@ -472,6 +516,7 @@ int main (void)
 		// Reload watchdog (watchdog fires after 1,6 seconds)
 		fwdgt_counter_reload();
   }
+	*/
 }
 
 #ifdef MASTER
@@ -480,6 +525,7 @@ int main (void)
 //----------------------------------------------------------------------------
 void ShutOff(void)
 {
+	/*
 	int index = 0;
 
 	buzzerPattern = 0;
@@ -506,6 +552,7 @@ void ShutOff(void)
 		// Reload watchdog until device is off
 		fwdgt_counter_reload();
 	}
+	*/
 }
 
 //----------------------------------------------------------------------------
