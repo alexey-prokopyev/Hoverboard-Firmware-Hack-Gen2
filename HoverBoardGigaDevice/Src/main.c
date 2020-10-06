@@ -47,6 +47,8 @@
 #include <math.h>     
 #include "arm_math.h" 
 
+uint32_t bldc_counter = 0;
+
 #ifdef MASTER
 int32_t steer = 0; 												// global variable for steering. -1000 to 1000
 int32_t speed = 0; 												// global variable for speed.    -1000 to 1000
@@ -284,6 +286,7 @@ int main (void)
 #endif
 	
 	//SystemClock_Config();
+	SystemInit();
   SystemCoreClockUpdate();
   SysTick_Config(SystemCoreClock / 1000);
 	
@@ -374,6 +377,10 @@ int main (void)
 		hall_b = gpio_input_bit_get(HALL_B_PORT, HALL_B_PIN);
 		hall_c = gpio_input_bit_get(HALL_C_PORT, HALL_C_PIN);
 		Log("HALL: (%d, %d, %d)\r\n", hall_a, hall_b, hall_c);
+		
+		Log("BLDC counter = %d, Freq=%d Hz\r\n", bldc_counter, bldc_counter*10);
+		Log("System clock=%d\r\n", SystemCoreClock);
+		bldc_counter = 0;
 	}
 
 /*

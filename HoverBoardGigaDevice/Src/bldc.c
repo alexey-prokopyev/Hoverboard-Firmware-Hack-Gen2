@@ -41,6 +41,8 @@ float batteryVoltage = 40.0;
 float currentDC = 0.0;
 float realSpeed = 0.0;
 
+extern uint32_t bldc_counter;
+
 // Timeoutvariable set by timeout timer
 extern FlagStatus timedOut;
 
@@ -152,6 +154,8 @@ void CalculateBLDC(void)
 	int y = 0;     // yellow = phase A
 	int b = 0;     // blue   = phase B
 	int g = 0;     // green  = phase C
+
+	bldc_counter++;
 	
 	// Calibrate ADC offsets for the first 1000 cycles
   if (offsetcount < 1000)
@@ -186,7 +190,7 @@ void CalculateBLDC(void)
 	
 	// Calculate current DC
 	currentDC = ABS((adc_buffer.current_dc - offsetdc) * MOTOR_AMP_CONV_DC_AMP);
-
+/*
   // Disable PWM when current limit is reached (current chopping), enable is not set or timeout is reached
 	if (currentDC > DC_CUR_LIMIT || bldc_enable == RESET)
 	{
@@ -196,7 +200,7 @@ void CalculateBLDC(void)
 	{
 		timer_automatic_output_enable(TIMER_BLDC);
   }
-	
+	*/
   // Read hall sensors
 	hall_a = gpio_input_bit_get(HALL_A_PORT, HALL_A_PIN);
   hall_b = gpio_input_bit_get(HALL_B_PORT, HALL_B_PIN);
