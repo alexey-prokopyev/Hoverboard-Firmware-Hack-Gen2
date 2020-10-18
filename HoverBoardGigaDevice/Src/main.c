@@ -286,7 +286,7 @@ int main (void)
 #endif
 	
 	//SystemClock_Config();
-	SystemInit();
+	//SystemInit();
   SystemCoreClockUpdate();
   SysTick_Config(SystemCoreClock / 1000);
 	
@@ -356,18 +356,20 @@ int main (void)
 	
 	
 	alpha = 0.0;
-	SetPWM(100);
+	SetPWM(0);
 	SetEnable(SET);
+	
+	speed = 100;
 	
 	while(1)
 	{
-		//alpha += PI / 2.0 / 4;
-		//speed = sin(alpha) * 200.0;
+		//alpha += PI / 2.0 / 20;
+		//speed = sin(alpha) * 500.0;
 		//steerAngle+= 1.0;
 		
 		
-		//pwmMaster = CLAMP(speed, -1000, 1000);
-		//SetPWM(pwmMaster);
+		pwmMaster = CLAMP(speed, -1000, 1000);
+		SetPWM(pwmMaster);
 		
 		fwdgt_counter_reload();
 		Delay(100);
@@ -380,6 +382,7 @@ int main (void)
 		
 		Log("BLDC counter = %d, Freq=%d Hz\r\n", bldc_counter, bldc_counter*10);
 		Log("System clock=%d\r\n", SystemCoreClock);
+		Log("Speed=%d\r\n", speed);
 		bldc_counter = 0;
 	}
 
